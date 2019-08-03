@@ -4,6 +4,7 @@
 
 from aiosparql.client import SPARQLClient
 from aiojena.literal import Literal
+from aiojena.uri import URI
 
 
 class JenaClient(SPARQLClient):
@@ -19,6 +20,10 @@ class JenaClient(SPARQLClient):
             for variable_name, variable_info in variable_dict.items():
                 if variable_info['type'] == 'literal':
                     _results[variable_name] = Literal(
+                        value=variable_info['value']
+                    )
+                if variable_info['type'] == 'uri':
+                    _results[variable_name] = URI(
                         value=variable_info['value']
                     )
             results.append(_results)
