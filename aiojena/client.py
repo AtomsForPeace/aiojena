@@ -5,6 +5,7 @@
 from aiosparql.client import SPARQLClient
 from aiojena.literal import Literal
 from aiojena.uri import URI
+from aiojena.exceptions import UnknownType
 
 
 class JenaClient(SPARQLClient):
@@ -22,9 +23,11 @@ class JenaClient(SPARQLClient):
                     _results[variable_name] = Literal(
                         value=variable_info['value']
                     )
-                if variable_info['type'] == 'uri':
+                elif variable_info['type'] == 'uri':
                     _results[variable_name] = URI(
                         value=variable_info['value']
                     )
+                else:
+                    raise UnknownType(variable_info['type'])
             results.append(_results)
         return results
