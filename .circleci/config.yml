@@ -20,6 +20,8 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - run: |
+          docker run -p 3030:3030 stain/jena-fuseki
 
       - run:
           name: install dependencies
@@ -34,7 +36,6 @@ jobs:
       - run:
           name: run tests
           command: |
-            docker run -d -p 3030:3030 stain/jena-fuseki
             . venv/bin/activate
             python -m pytest tests
   
