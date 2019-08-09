@@ -19,7 +19,12 @@ jobs:
     
     steps:
       - checkout
-
+      - setup_remote_docker
+      - run:
+          name: Does docker even exist
+          command: docker -v
+      - run:
+          name: Install docker-compose
       - run: |
           docker run -p 3030:3030 stain/jena-fuseki
 
