@@ -20,10 +20,12 @@ jobs:
     steps:
       - checkout
 
+      - run: |
+        docker run -p 3030:3030 stain/jena-fuseki
+
       - run:
           name: install dependencies
           command: |
-            docker run -p 3030:3030 stain/jena-fuseki
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
