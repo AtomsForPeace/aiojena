@@ -21,7 +21,7 @@ jobs:
       - checkout
 
       - run: |
-        docker run -p 3030:3030 stain/jena-fuseki
+          docker run -p 3030:3030 stain/jena-fuseki
 
       - run:
           name: install dependencies
