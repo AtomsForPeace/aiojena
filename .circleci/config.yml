@@ -30,7 +30,7 @@ jobs:
             curl -L https://github.com/docker/compose/releases/download/1.12.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
       - run: |
-          docker run -p 3030:3030 stain/jena-fuseki
+          docker run -d -p 3030:3030 stain/jena-fuseki
 
       - run:
           name: install dependencies
