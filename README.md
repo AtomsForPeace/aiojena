@@ -52,3 +52,12 @@ async def showcase():
     results[0]['label'] == 'This is a label'  # True
 
 ```
+
+## To test
+Have a test instance of Fuseki running. Be aware that testing requires modification and deletion of the RDF store. Set the address of Fuseki in the testing.cfg. 
+
+```
+pip install -r test-requirements.txt
+pip install -r requirements.txt
+```
+Run pytest tests/
