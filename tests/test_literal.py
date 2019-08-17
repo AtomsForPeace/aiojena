@@ -2,56 +2,80 @@
 # -*- coding: utf-8 -*-
 # File name: test_literal.py
 
+from typing import List
+from rdflib import URIRef
 import pytest
-from aiojena.literal import Literal
+
+
+async def simple_insert(jena_client, subj, pred, obj) -> None:
+    await jena_client.update(
+        """
+        INSERT DATA {{
+          {subj}     {pred}      {obj}
+        }}
+        """, {
+            'subj': subj,
+            'pred': pred,
+            'obj': obj
+        }
+    )
+
+
+async def simple_select_object(jena_client, subj, pred, obj) -> List:
+    return await jena_client.query(
+        """
+        SELECT {obj}
+        WHERE {{
+          {subj}     {pred}      {obj}
+        }}
+        """, {
+            'subj': subj,
+            'pred': pred,
+            'obj': obj
+        }
+    )
 
 
 @pytest.mark.asyncio
 async def test_string_literal(jena_client, truncate_jena):
-    test_string = 'String'
-    test_literal = Literal(test_string)
-    insert_query = """
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    test_subject = URIRef('http://test.com')
+    test_predicate = URIRef('http://www.w3.org/2000/01/rdf-schema#:label')
+    test_object = 'String'
 
-    INSERT DATA {{
-      <http://test.com>     rdfs:label      {test_literal}
-    }}
-    """.format(test_literal=test_literal)
-    await jena_client.update(insert_query)
-
-    select_query = """
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-    SELECT ?string
-    WHERE {
-      <http://test.com>     rdfs:label      ?string
-    }
-    """
-    results = await jena_client.query(select_query)
+    await simple_insert(
+        jena_client=jena_client,
+        subj=test_subject,
+        pred=test_predicate,
+        obj=test_object
+    )
+    results = await simple_select_object(
+        jena_client=jena_client,
+        subj=test_subject,
+        pred=test_predicate,
+        obj='?string'
+    )
     assert len(results) == 1
-    assert results[0]['string'] == test_string
+    assert results[0]['string'] == test_object
 
 
 @pytest.mark.asyncio
 async def test_int_literal(jena_client, truncate_jena):
-    test_integer = 1
-    test_literal = Literal(test_integer)
-    query_string = """
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    INSERT DATA {{
-      <http://test.com>     rdfs:label      {test_literal}
-    }}
-    """.format(test_literal=test_literal)
-    await jena_client.update(query_string)
+    test_subject = URIRef('http://test.com')
+    test_predicate = URIRef('http://www.w3.org/2000/01/rdf-schema#:label')
+    test_object = 1
 
-    select_query = """
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    await simple_insert(
+        jena_client=jena_client,
+        subj=test_subject,
+        pred=test_predicate,
+        obj=test_object
+    )
 
-    SELECT ?integer
-    WHERE {
-      <http://test.com>     rdfs:label      ?integer
-    }
-    """
-    results = await jena_client.query(select_query)
+    results = await simple_select_object(
+        jena_client=jena_client,
+        subj=test_subject,
+        pred=test_predicate,
+        obj='?integer'
+    )
     assert len(results) == 1
-    assert results[0]['integer'] == test_integer
+    assert results[0]['integer'] == test_object

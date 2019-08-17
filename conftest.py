@@ -8,7 +8,7 @@ from aiojena.client import JenaClient
 
 @pytest.fixture
 async def jena_client():
-    async with JenaClient('http://localhost:3030/') as jc:
+    async with JenaClient('http://localhost:3030/test') as jc:
         yield jc
 
 
