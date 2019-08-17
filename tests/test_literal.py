@@ -2,42 +2,14 @@
 # -*- coding: utf-8 -*-
 # File name: test_literal.py
 
-from typing import List
 from rdflib import URIRef
 import pytest
 
 
-async def simple_insert(jena_client, subj, pred, obj) -> None:
-    await jena_client.update(
-        """
-        INSERT DATA {{
-          {subj}     {pred}      {obj}
-        }}
-        """, {
-            'subj': subj,
-            'pred': pred,
-            'obj': obj
-        }
-    )
-
-
-async def simple_select_object(jena_client, subj, pred, obj) -> List:
-    return await jena_client.query(
-        """
-        SELECT {obj}
-        WHERE {{
-          {subj}     {pred}      {obj}
-        }}
-        """, {
-            'subj': subj,
-            'pred': pred,
-            'obj': obj
-        }
-    )
-
-
 @pytest.mark.asyncio
-async def test_string_literal(jena_client, truncate_jena):
+async def test_string_literal(
+    jena_client, truncate_jena, simple_insert, simple_select_object
+):
     test_subject = URIRef('http://test.com')
     test_predicate = URIRef('http://www.w3.org/2000/01/rdf-schema#:label')
     test_object = 'String'
@@ -59,7 +31,9 @@ async def test_string_literal(jena_client, truncate_jena):
 
 
 @pytest.mark.asyncio
-async def test_int_literal(jena_client, truncate_jena):
+async def test_int_literal(
+    jena_client, truncate_jena, simple_insert, simple_select_object
+):
     test_subject = URIRef('http://test.com')
     test_predicate = URIRef('http://www.w3.org/2000/01/rdf-schema#:label')
     test_object = 1
