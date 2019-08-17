@@ -31,7 +31,7 @@ async def simple_insert():
         await jena_client.update(
             """
             INSERT DATA {{
-            {subj}     {pred}      {obj}
+              {subj}     {pred}      {obj}
             }}
             """, {
                 'subj': subj,
@@ -49,7 +49,7 @@ async def simple_select_predicate():
             """
             SELECT {pred}
             WHERE {{
-            {subj}     {pred}      {obj}
+              {subj}     {pred}      {obj}
             }}
             """, {
                 'subj': subj,
@@ -67,7 +67,7 @@ async def simple_select_object():
             """
             SELECT {obj}
             WHERE {{
-            {subj}     {pred}      {obj}
+              {subj}     {pred}      {obj}
             }}
             """, {
                 'subj': subj,
