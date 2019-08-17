@@ -6,8 +6,6 @@ An asynchronous python wrapper on top of aiosparql specifically for [Apache Jena
 from aiojena.client import JenaClient
 
 
-result = await client.query("select * where {?s ?p ?o} limit 1")
-
 # One showcase function with all the main features:
 async def showcase():
     jena_client = JenaClient("<your_sparql_endpoint>")
@@ -35,7 +33,7 @@ async def showcase():
     )
     len(results) == 1  # True
     # The result is returned as a python str object 
-    results['label'] == 'This is a label'  # True
+    results[0]['label'] == 'This is a label'  # True
         
     # Dealing with URI objects with rdflib.URIRef
     from rdflib import URIRef
@@ -51,6 +49,6 @@ async def showcase():
         }
     )
     len(results) == 1  # True
-    results['label'] == 'This is a label'  # True
+    results[0]['label'] == 'This is a label'  # True
 
 ```
