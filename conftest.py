@@ -3,13 +3,26 @@
 # File name: conftest.py
 
 from typing import List
+from configparser import ConfigParser
 import pytest
 from aiojena.client import JenaClient
 
 
 @pytest.fixture
-async def jena_client():
-    async with JenaClient('http://localhost:3030/test') as jc:
+def config():
+    cfg = ConfigParser()
+    cfg.read('testing.cfg')
+    yield cfg
+
+
+@pytest.fixture
+def sparql_endpoint(config: ConfigParser):
+    yield config.get('sparql', 'endpoint')
+
+
+@pytest.fixture
+async def jena_client(sparql_endpoint):
+    async with JenaClient(sparql_endpoint) as jc:
         yield jc
 
 
