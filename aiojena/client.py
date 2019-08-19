@@ -13,22 +13,39 @@ def add_type(value, xml_type) -> str:
     return '"' + value + '"^^' + xml_type.n3()
 
 
+def parse_singular(value):
+    if isinstance(value, URIRef):
+        return value.n3()
+    elif isinstance(value, str):
+        if value.startswith('?'):
+            return value
+        else:
+            return add_type(value, string_type)
+    elif isinstance(value, int):
+        return add_type(str(value), integer_type)
+    else:
+        raise UnknownType('Received unknown type {value}'.format(value=value))
+
+
+def parse_iterative(value):
+    return '(' + ', '.join((parse_singular(_value) for _value in value)) + ')'
+
+
 def parse_query(query: str, params: Dict) -> str:
     if not params:
         return query
     _params = {}
     for key, value in params.items():
-        if isinstance(value, URIRef):
-            _params[key] = value.n3()
-        elif isinstance(value, str):
-            if value.startswith('?'):
-                _params[key] = value
-            else:
-                _params[key] = add_type(value, string_type)
-        elif isinstance(value, int):
-            _params[key] = add_type(str(value), integer_type)
+        if isinstance(value, tuple):
+            _params[key] = parse_iterative(value)
+        elif isinstance(value, (URIRef, str, int)):
+            _params[key] = parse_singular(value)
         else:
-            UnknownType('Received unknown type f{value}')
+            raise UnknownType(
+                'Received unknown type ({type(value)}) for {value}'.format(
+                    value=value
+                )
+            )
     return query.format(**_params)
 
 
