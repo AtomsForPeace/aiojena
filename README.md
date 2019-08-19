@@ -15,7 +15,7 @@ async def showcase():
     await jena_client.update(
         """
         INSERT DATA {{
-          <https://test.com> <http://www.w3.org/2000/01/rdf-schema#:label> {label}
+          <https://test.com> <http://www.w3.org/2000/01/rdf-schema#:label> {label}  .
         }}
         """, {
             'label': 'This is a label'
@@ -27,7 +27,7 @@ async def showcase():
         """
         SELECT ?label
         WHERE {{
-          <https://test.com> <http://www.w3.org/2000/01/rdf-schema#:label> ?label
+          <https://test.com> <http://www.w3.org/2000/01/rdf-schema#:label> ?label  .
         }}
         """
     )
@@ -42,7 +42,7 @@ async def showcase():
         """
         SELECT ?label
         WHERE {{
-          {test_uri_object} <http://www.w3.org/2000/01/rdf-schema#:label> ?label
+          {test_uri_object} <http://www.w3.org/2000/01/rdf-schema#:label> ?label  .
         }}
         """, {
             'test_uri_object': test_uri_object
@@ -50,6 +50,25 @@ async def showcase():
     )
     len(results) == 1  # True
     results[0]['label'] == 'This is a label'  # True
+    
+    # Passing tuples and finding the subject from our first example
+    from rdflib import URIRef
+    rdfs_label = URIRef('http://www.w3.org/2000/01/rdf-schema#:label')
+    test_labels = ('This is a label', 'This is also a label')
+    results = await jena_client.query(
+        """
+        SELECT ?subject
+        WHERE {{
+          ?subject {rdfs_label} ?label  .
+          FILTER(?label IN {test_labels})
+        }}
+        """, {
+            'rdfs_label': rdfs_label,
+            'test_labels': test_labels
+        }
+    )
+    len(results) == 1  # True
+    results[0]['subject'] == URIRef('https://test.com')  # True
 
 ```
 
