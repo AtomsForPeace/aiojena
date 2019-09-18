@@ -23,8 +23,7 @@ def parse_singular(value):
             return add_type(value, string_type)
     elif isinstance(value, int):
         return add_type(str(value), integer_type)
-    else:
-        raise UnknownType('Received unknown type {value}'.format(value=value))
+    raise UnknownType('Received unknown type {}'.format(value))
 
 
 def parse_iterative(value):
@@ -55,15 +54,21 @@ def parse_results(results: Dict):
     for variable_dict in bindings:
         _results = {}
         for variable_name, variable_info in variable_dict.items():
-            if variable_info['type'] == 'literal':
-                if URIRef(variable_info['datatype']) == string_type:
+            if variable_info['type'] == 'uri':
+                _results[variable_name] = URIRef(value=variable_info['value'])
+            elif variable_info['type'] == 'literal':
+                if variable_info.get('datatype'):
+                    datatype = URIRef(variable_info['datatype'])
+                else:
+                    datatype = None
+                if not datatype:
                     _results[variable_name] = variable_info['value']
-                elif URIRef(variable_info['datatype']) == integer_type:
+                elif datatype == string_type:
+                    _results[variable_name] = variable_info['value']
+                elif datatype == integer_type:
                     _results[variable_name] = int(variable_info['value'])
-            elif variable_info['type'] == 'uri':
-                _results[variable_name] = URIRef(
-                    value=variable_info['value']
-                ).n3()
+                else:
+                    raise UnknownType(variable_info['type'])
             else:
                 raise UnknownType(variable_info['type'])
         parsed.append(_results)

@@ -26,4 +26,4 @@ async def test_uri(
         obj=test_object,
     )
     assert len(results) == 1
-    assert results[0]['uri'] == test_predicate.n3()
+    assert results[0]['uri'] == test_predicate

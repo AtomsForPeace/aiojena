@@ -5,6 +5,5 @@
 from rdflib import URIRef
 
 
-example = '"^^<http://www.w3.org/2001/XMLSchema:integer>'
-string_type = URIRef('http://www.w3.org/2001/XMLSchema:string')
-integer_type = URIRef('http://www.w3.org/2001/XMLSchema:integer')
+string_type = URIRef('http://www.w3.org/2001/XMLSchema#string')
+integer_type = URIRef('http://www.w3.org/2001/XMLSchema#integer')
