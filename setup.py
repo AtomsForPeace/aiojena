@@ -9,5 +9,5 @@ setup(
     name='aiojena',
     version='0.0.1',
     description='A Jena wrapper for aiosparql with automatic type conversion',
-    install_requires=['RDFLib', 'aiosparql'],
+    install_requires=['RDFLib', ],
 )
