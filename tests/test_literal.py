@@ -74,8 +74,10 @@ async def test_int_literal_iter(
         """
         SELECT ?integer
         WHERE {{
-          {subj} {pred} ?integer .
-          FILTER(?integer IN {test_objects})
+          GRAPH <urn:x-arq:DefaultGraph> {{
+            {subj} {pred} ?integer .
+            FILTER(?integer IN {test_objects})
+          }}
         }}
         """, {
             'subj': test_subject,
