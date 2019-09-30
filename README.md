@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/AtomsForPeace/aiojena.svg?branch=master)](https://travis-ci.com/AtomsForPeace/aiojena)
+
 # aiojena
 
 An asynchronous python wrapper on top of aiosparql specifically for [Apache Jena](https://jena.apache.org/).
