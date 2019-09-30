@@ -12,7 +12,7 @@ install:
   - pip install tox tox-travis codecov
 
 before_script:
-  - docker run --rm -it -p 3030:3030 --name fuseki -e ADMIN_PASSWORD=PASSWORD -e ENABLE_DATA_WRITE=true -e ENABLE_UPDATE=true -e ENABLE_UPLOAD=true secoresearch/fuseki
+  - docker run --rm -d -p 3030:3030 --name fuseki -e ADMIN_PASSWORD=PASSWORD -e ENABLE_DATA_WRITE=true -e ENABLE_UPDATE=true -e ENABLE_UPLOAD=true secoresearch/fuseki
 
 script:
   - tox
