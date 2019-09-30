@@ -32,7 +32,9 @@ async def truncate_jena(jena_client: JenaClient):
         """
         DELETE
         WHERE {
-          ?s ?p ?o
+          GRAPH <urn:x-arq:DefaultGraph> {
+            ?s ?p ?o
+          }
         }
         """
     )
@@ -62,7 +64,9 @@ async def simple_select_predicate():
             """
             SELECT {pred}
             WHERE {{
-              {subj}     {pred}      {obj}
+              GRAPH <urn:x-arq:DefaultGraph> {{
+                {subj}     {pred}      {obj}
+              }}
             }}
             """, {
                 'subj': subj,
@@ -80,7 +84,9 @@ async def simple_select_object():
             """
             SELECT {obj}
             WHERE {{
-              {subj}     {pred}      {obj}
+              GRAPH <urn:x-arq:DefaultGraph> {{
+                {subj}     {pred}      {obj}
+              }}
             }}
             """, {
                 'subj': subj,
