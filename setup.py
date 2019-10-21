@@ -8,6 +8,7 @@ from setuptools import setup
 setup(
     name='aiojena',
     version='0.0.3',
+    packages=['aiojena']
     description='A Jena wrapper for aiosparql with automatic type conversion',
     install_requires=['RDFLib', ],
 )
